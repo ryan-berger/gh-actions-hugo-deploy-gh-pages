@@ -1,7 +1,6 @@
 #!/bin/sh
 echo '=================== Install Hugo ==================='
 DOWNLOAD_HUGO_VERSION=${HUGO_VERSION:-0.54.0}
-SITE_PATH=${SITE_PATH:-./}
 GITHUB_DEPLOY_REPOSITORY=${GITHUB_REMOTE_REPOSITORY:-$GITHUB_REPOSITORY}
 GITHUB_DEPLOY_BRANCH=${GITHUB_BRANCH:-"gh-pages"}
 echo "Installing Hugo $DOWNLOAD_HUGO_VERSION"
@@ -14,11 +13,9 @@ mkdir /root/.ssh
 ssh-keyscan -t rsa github.com > /root/.ssh/known_hosts && \
 echo "${GIT_DEPLOY_KEY}" > /root/.ssh/id_rsa && \
 chmod 400 /root/.ssh/id_rsa
-echo '=================== Update all submodules ==================='
-git submodule init
-git submodule update --recursive --remote
 echo '=================== Build site ==================='
-cd SITE_PATH
+cd static/marketing-site/
+git submodule add -b master git@github.com:conifersoftware/conifersoftware.github.io.git public
 HUGO_ENV=production hugo -v --minify
 echo '=================== Publish to GitHub Pages ==================='
 cd public
