@@ -15,13 +15,13 @@ ssh-keyscan -t rsa github.com > /root/.ssh/known_hosts && \
 echo "${GIT_DEPLOY_KEY}" > /root/.ssh/id_rsa && \
 chmod 400 /root/.ssh/id_rsa
 echo '=================== Update all submodules ==================='
-cd SITE_PATH
 git submodule init
 git submodule update --recursive --remote
 echo '=================== Build site ==================='
-HUGO_ENV=production hugo -v --minify -d dist
+cd SITE_PATH
+HUGO_ENV=production hugo -v --minify
 echo '=================== Publish to GitHub Pages ==================='
-cd dist
+cd public
 remote_repo="git@github.com:${GITHUB_DEPLOY_REPOSITORY}.git" && \
 remote_branch=${GITHUB_DEPLOY_BRANCH} && \
 echo "Pushing Builds to $remote_repo:$remote_branch" && \
